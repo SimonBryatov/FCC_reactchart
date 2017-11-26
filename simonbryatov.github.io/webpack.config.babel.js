@@ -1,6 +1,6 @@
+import {HotModuleReplacementPlugin} from 'webpack';
 var path = require('path');  
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-import {HotModuleReplacementPlugin} from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
 const defaultEnv = {  
@@ -10,7 +10,16 @@ const defaultEnv = {
 
 
 export default (env = defaultEnv) => ({  
-  entry: [
+  plugins: [
+    new HtmlWebpackPlugin({
+        filename: 'index.html',
+        template: './src/index.html'
+    }),
+    ...env.dev ? [
+    new HotModuleReplacementPlugin()] : [ new ExtractTextPlugin('[name].css')]
+  ],
+  
+  entry: [ 
     path.join(__dirname, 'src/index.jsx'),
     ...env.dev ? [
     'react-hot-loader/patch', // Needed to preserve state
@@ -20,14 +29,6 @@ export default (env = defaultEnv) => ({
     path: path.join(__dirname, '../docs'),
     filename: 'bundle.js',
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-        filename: 'index.html',
-        template: './src/index.html'
-    }),
-    ...env.dev ? [
-    new HotModuleReplacementPlugin()] : [ new ExtractTextPlugin('[name].css')]
-  ], 
   module: {
     rules: [
       {
@@ -44,9 +45,9 @@ export default (env = defaultEnv) => ({
                     "es2015",  {
                         "modules": false
                     }
-                ], "react"
+                ], "react", 'stage-0'
             ],
-            plugins: ['react-hot-loader/babel']
+            plugins: ['react-hot-loader/babel', 'transform-runtime']
             }
           }
         ]

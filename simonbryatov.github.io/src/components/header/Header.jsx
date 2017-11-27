@@ -5,7 +5,7 @@ import './Header.scss';
 
 function Header() {  
   return (
-      <h1>Simple React Page</h1>
+      <h1>USA Gross Domestic Product</h1>
   );
 }
 
